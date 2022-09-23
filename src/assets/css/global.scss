@@ -1,0 +1,63 @@
+*, *:after, *:before {
+  font-size: calc(3px + 7 * (100vw / 1920));
+  font-family: 'Mulish', sans-serif;
+  box-sizing: border-box;
+}
+
+:root {
+  /* ------ PALETTE ------ */
+  --cadet-blue-crayola: #ccd5de;
+  --dark: #575757;
+  --white: #fbfbfb;
+  --asjfda: #5E697D;
+  --asdasf: #84909F;
+  --blue: #418EEA;
+  --light-gray: #EFEFEF;
+  /* ------ THEME ------ */
+  --auth-background: var(--cadet-blue-crayola);
+  --foreground: var(--dark);
+  --background-light: var(--white);
+  --subtext-dark: var(--asjfda);
+  --subtext: var(--asdasf);
+  --main: var(--blue);
+  --background: var(--light-gray);
+}
+
+body
+{
+  width: 100%;
+  line-height: 1.25;
+  background: var(--background);
+  overflow: hidden;
+}
+main {
+  display: flex;
+  justify-content: space-between;
+  height: calc(100vh - 8rem);
+}
+.sidebar {
+  width: 28rem;
+  min-width: 28rem;
+  background: var(--background-light);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 3.8rem;
+  .wrapper {
+    height: 100%;
+    width: 100%;
+  }
+}
+.container {
+  width: 100%;
+}
+
+@media(max-width: 450px) {
+  *, *:after, *:before {
+    font-size: calc(8px + 2 * (100vw / 1920));
+  }
+}@media(min-width: 1920px) {
+  *, *:after, *:before {
+    font-size: calc(2px + 8 * (100vw / 1920));
+  }
+}
