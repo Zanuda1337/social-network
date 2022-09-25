@@ -1,0 +1,141 @@
+.header {
+  overflow: hidden;
+  padding: 1rem 1rem 0 1rem;
+  position: relative;
+  img {
+    max-height:25rem;
+    border-radius: 1.4rem;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.info {
+  display: flex;
+  padding: 0 3rem 1.4rem;
+  margin-top: -4.5rem;
+  align-items: flex-end;
+  .avatar {
+    width: 8.4rem;
+    height: 8.4rem;
+    border: 3px solid var(--background-light);
+    z-index: 1;
+  }
+  p {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--subtext);
+    margin: 1.25rem 1rem;
+  }
+}
+
+.about {
+  position: relative;
+  padding: 2rem 3rem;
+  div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    p:first-child {
+      color: var(--foreground);
+      font-size: 2.8rem;
+      font-weight: 700;
+    }
+    .online {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--subtext);
+    }
+  }
+  .status {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--subtext);
+    margin-bottom: 2rem;
+    width: 100%;
+    text-align: left;
+  }
+  .edit {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    background: var(--background-light);
+    position: absolute;
+    box-shadow: 0 0 5px 1px rgba(0,0,0,.15);
+    padding: 1rem;
+    border-radius: 1rem;
+    max-width: 50rem;
+    width: calc(100% - 2rem);
+    left: 1rem;
+    bottom: -1.8rem;
+    input {
+      background: var(--background);
+      padding: .5rem 1rem;
+      border-radius: .7rem;
+    }
+    .button {
+      background: var(--main);
+      color: var(--background-light);
+      padding: .2rem 1rem;
+      font-size: 1.5rem;
+      border-radius: 1rem;
+      width: 7rem;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.separator {
+  width: 100%;
+  border-bottom: 1px solid var(--separator-common);
+}
+.footer {
+  align-items: center;
+  padding: 1.5rem 1.8rem;
+  display: flex;
+  justify-content: space-between;
+}
+.tabs {
+  button {
+    width: 7rem;
+    margin: 0 1rem;
+    p:first-child {
+      color: var(--foreground);
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    p:last-child {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--subtext);
+    }
+  }
+}
+
+.more {
+  padding: 1rem 3rem;
+  div {
+    width: .8rem;
+    height: .8rem;
+    background: var(--subtext);
+    border-radius: 50%;
+    position: relative;
+  }
+  div:before, div:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: inherit;
+  }
+  div:before {
+    right: 1.3rem;
+  }
+  div:after {
+    left: 1.3rem;
+  }
+}

@@ -42,11 +42,11 @@ table {
 a {
     text-decoration: unset;
 }
-input, button {
+input, button, textarea {
     background: unset;
     border: unset;
 }
-input:focus-visible {
+input:focus-visible, textarea:focus-visible {
     outline: none;
 }
 button {

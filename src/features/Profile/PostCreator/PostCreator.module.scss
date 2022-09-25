@@ -1,0 +1,61 @@
+.input-container {
+  --height: 5rem;
+  display: flex;
+  padding: 3rem 3rem .5rem;
+  .input {
+    max-height: var(--height);
+    border-radius: 2rem;
+    display: flex;
+    background: var(--background);
+    width: 100%;
+    textarea {
+      padding: 1.5rem 1.5rem 1rem;
+      width: 100%;
+      resize: none;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--subtext);
+    }
+    textarea::placeholder {
+      opacity: .5;
+    }
+  }
+  .editor {
+    margin-left: 2rem;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    .tooltip {
+      display: flex;
+      padding: 2rem;
+      button {
+        display: flex;
+        align-items: center;
+        width: 11rem;
+        margin: -1rem;
+        margin-right: 1rem;
+        padding: 1rem;
+        svg {
+          height: 2.5rem;
+          margin-right: 1rem;
+          stroke: var(--subtext);
+        }
+        p {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: var(--subtext);
+        }
+      }
+    }
+  }
+}
+
+.input-container {
+  --height: 5rem;
+  .avatar {
+    min-height: var(--height);
+    min-width: var(--height);
+    max-height: var(--height);
+    max-width: var(--height);
+  }
+}

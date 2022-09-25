@@ -5,22 +5,20 @@ import Header from "src/features/Router/Header/Header";
 import Navigation from "src/features/Router/Navigation/Navigation";
 import SmallMessenger from "src/features/Router/SmallMessenger/SmallMessenger";
 
-const Router: React.FC = () => {
-  return (
-    <>
-      <Header />
-      <main>
-        <Navigation />
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<Profile />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </div>
-        <SmallMessenger />
-      </main>
-    </>
-  );
-};
+const Router: React.FC = () => (
+  <>
+    <Header />
+    <main>
+      <Navigation />
+      <div className="container main">
+        <Routes>
+          <Route path="/" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </div>
+      <SmallMessenger />
+    </main>
+  </>
+);
 
 export default Router;

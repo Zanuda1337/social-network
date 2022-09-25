@@ -84,3 +84,8 @@ header {
   };
 }
 
+@media(max-width: 480px) {
+  .search {
+    display: none;
+  }
+}
