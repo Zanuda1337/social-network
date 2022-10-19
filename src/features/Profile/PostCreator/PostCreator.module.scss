@@ -3,12 +3,15 @@
   display: flex;
   padding: 3rem 3rem .5rem;
   .input {
-    max-height: var(--height);
     border-radius: 2rem;
     display: flex;
     background: var(--background);
     width: 100%;
     textarea {
+      transition: .15s ease-out;
+      max-height: 80rem;
+      min-height: var(--height);
+      height: var(--height);
       padding: 1.5rem 1.5rem 1rem;
       width: 100%;
       resize: none;
@@ -20,31 +23,58 @@
       opacity: .5;
     }
   }
+  .input-active {
+    textarea {
+      resize: vertical;
+      height: calc(var(--height) * 4);
+    }
+  }
   .editor {
     margin-left: 2rem;
     display: flex;
     width: 100%;
     flex-direction: column;
-    .tooltip {
+    .buttons-wrapper {
       display: flex;
-      padding: 2rem;
-      button {
+      justify-content: space-between;
+      align-items: center;
+      .buttons {
         display: flex;
-        align-items: center;
-        width: 11rem;
-        margin: -1rem;
-        margin-right: 1rem;
-        padding: 1rem;
-        svg {
-          height: 2.5rem;
+        padding: 2rem;
+        button:not([class]) {
+          display: flex;
+          align-items: center;
+          width: 11rem;
+          margin: -1rem;
           margin-right: 1rem;
-          stroke: var(--subtext);
+          padding: 1rem;
+          svg {
+            height: 2.5rem;
+            margin-right: 1rem;
+            stroke: var(--subtext);
+          }
+          p {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--subtext);
+          }
+
         }
-        p {
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: var(--subtext);
-        }
+      }
+      .publish {
+        display: flex;
+        background: var(--main);
+        color: var(--background-light);
+        padding: .5rem 2rem;
+        font-size: 1.5rem;
+        border-radius: .75rem;
+        height: 2.5rem;
+        justify-content: center;
+        align-items: center;
+        transition: .3s;
+      }
+      .publish:hover {
+        opacity: .7;
       }
     }
   }

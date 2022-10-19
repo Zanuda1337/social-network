@@ -20,7 +20,7 @@ const TextField: React.FC<TTextFieldProps> = ({ placeholder, type }) => {
       <p>{placeholder}</p>
       <input
         type={type}
-        onFocus={() => setIsActive(input.length ? true : true)}
+        onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(!!input.length)}
         onChange={(event) => {
           setInput(event.target.value);

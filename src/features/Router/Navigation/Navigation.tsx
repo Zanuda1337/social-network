@@ -1,10 +1,12 @@
 import React from "react";
 import classes from "./Navigation.module.scss";
-import { NavLink } from "react-router-dom";
 import Avatar from "src/components/Avatar/Avatar";
 import SvgSelector from "src/components/SvgSelector/SvgSelector";
+import { NavLink } from "react-router-dom";
+import { useAppSelector } from "src/hooks/hooks";
 
 const Navigation: React.FC = () => {
+  const profile = useAppSelector((state) => state.profile);
   return (
     <div className="sidebar">
       <div className="wrapper">
@@ -12,8 +14,8 @@ const Navigation: React.FC = () => {
           <NavLink to="profile" className={classes.block}>
             <Avatar />
             <div className={classes.text}>
-              <p>Polina As Fuck</p>
-              <p>@pizdosovaya</p>
+              <p>{profile.userName}</p>
+              <p>{profile.uniqueUrlName}</p>
             </div>
           </NavLink>
           <div className={`${classes.block} ${classes.counters}`}>

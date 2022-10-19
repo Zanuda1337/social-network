@@ -1,34 +1,23 @@
 import classes from "src/features/Profile/Info/Info.module.scss";
 import headerPicture from "src/assets/images/header.png";
 import Avatar from "src/components/Avatar/Avatar";
-import React, { EventHandler, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
+import { useClickAway } from "src/hooks/hooks";
+import clsx from "clsx";
+import { IProfileState } from "src/features/Profile/Profile.slice";
 
-const useClickAway = (handleClickAway: () => void) => {
-  const node = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleClick = (event: Event) => {
-      const target = event.target as HTMLElement;
-      if (!node.current?.contains(target)) {
-        handleClickAway();
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  });
-
-  return node;
+type TInfoProps = {
+  profile: IProfileState;
+  onStatusChange: (status: string) => void;
 };
 
-const Info: React.FC = () => {
+const Info: React.FC<TInfoProps> = ({ profile, onStatusChange }) => {
   const [isEdit, setEdit] = useState<boolean>(false);
-  const [status, setStatus] = useState<string>("Learning React and Redux");
-  const [input, setInput] = useState<string>("");
-  const editor: React.RefObject<HTMLDivElement> = useClickAway(() => {
-    setEdit(false);
-    console.log("click");
-  });
+  const [input, setInput] = useState<string>(profile.status);
+  const editor: React.RefObject<HTMLDivElement> = useClickAway(() =>
+    setEdit(false)
+  );
+
   return (
     <div className={`block`}>
       <div className={classes.header}>
@@ -36,11 +25,11 @@ const Info: React.FC = () => {
       </div>
       <div className={classes.info}>
         <Avatar className={classes.avatar} />
-        <p>@pizdosovaya</p>
+        <p>{profile.uniqueUrlName}</p>
       </div>
       <div className={classes.about}>
         <div>
-          <p>Polina As Fuck</p>
+          <p>{profile.userName}</p>
           <p className={classes.online}>Last online 22 minutes ago</p>
         </div>
         {isEdit && (
@@ -50,7 +39,7 @@ const Info: React.FC = () => {
               className={classes.status}
               value={input}
               onChange={(event) =>
-                setInput(event.target.value.substring(0, 50))
+                setInput(event.target.value.substring(0, 100))
               }
               autoFocus={true}
               onFocus={(event) => event.target.select()}
@@ -58,7 +47,7 @@ const Info: React.FC = () => {
             <button
               onClick={() => {
                 setEdit(false);
-                setStatus(input.trim());
+                onStatusChange(input.trim());
               }}
               className={classes.button}
             >
@@ -66,17 +55,28 @@ const Info: React.FC = () => {
             </button>
           </div>
         )}
-        <button
-          onClick={() => {
-            setEdit(true);
-            setInput(status);
-          }}
-          className={classes.status}
-        >
-          {status}
-        </button>
+        {profile.status ? (
+          <button
+            onClick={() => {
+              setEdit(true);
+              setInput(profile.status);
+            }}
+            className={classes.status}
+          >
+            {profile.status}
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setEdit(true);
+            }}
+            className={clsx(classes.status, classes["set-status"])}
+          >
+            Set status
+          </button>
+        )}
       </div>
-      <div className={classes.separator}></div>
+      <div className={classes.separator} />
       <div className={classes.footer}>
         <div className={classes.tabs}>
           <button>
@@ -93,7 +93,7 @@ const Info: React.FC = () => {
           </button>
         </div>
         <button className={classes.more}>
-          <div></div>
+          <div />
         </button>
       </div>
     </div>
