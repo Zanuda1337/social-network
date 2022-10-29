@@ -1,0 +1,22 @@
+.user {
+  padding: .8rem;
+}
+
+.user:hover {
+  background: rgba(100,100,100,.04);
+}
+.user-active:hover {
+  background: var(--main);
+}
+.user-active {
+  background: var(--main);
+  .text {
+    .title {
+      color: var(--background-light);
+    }
+    .subtext {
+      color: var(--auth-background);
+    }
+  }
+}
+

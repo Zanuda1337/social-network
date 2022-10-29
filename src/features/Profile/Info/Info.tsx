@@ -92,7 +92,7 @@ const Info: React.FC<TInfoProps> = ({ profile, onStatusChange }) => {
             <p>Friends</p>
           </button>
         </div>
-        <button className={classes.more}>
+        <button className={clsx(classes.more, "more")}>
           <div />
         </button>
       </div>

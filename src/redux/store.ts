@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import counterReducer from "src/features/counter/counterSlice";
 import profileReducer from "src/features/Profile/Profile.slice";
+import messengerReducer from "src/features/Messenger/Messenger.slice";
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     profile: profileReducer,
+    messenger: messengerReducer,
   },
 });
 

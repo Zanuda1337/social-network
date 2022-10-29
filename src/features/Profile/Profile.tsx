@@ -5,6 +5,8 @@ import Post from "src/features/Profile/Post/Post";
 import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
 import { addPost, setPostText, setStatus } from "./Profile.slice";
 import { IPost } from "src/features/Profile/Profile.types";
+import clsx from "clsx";
+
 const Profile: React.FC = () => {
   const profile = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
@@ -15,7 +17,7 @@ const Profile: React.FC = () => {
   ) => dispatch(setPostText(event.target.value));
   const handleStatusChange = (status: string) => dispatch(setStatus(status));
   return (
-    <>
+    <div className={clsx("container", "main")}>
       <Info profile={profile} onStatusChange={handleStatusChange} />
       <PostCreator
         postText={profile.postText}
@@ -25,7 +27,7 @@ const Profile: React.FC = () => {
       {[...profile.posts].reverse().map((post) => (
         <Post post={post} key={post.id} />
       ))}
-    </>
+    </div>
   );
 };
 

@@ -4,18 +4,18 @@ import Profile from "src/features/Profile/Profile";
 import Header from "src/features/Router/Header/Header";
 import Navigation from "src/features/Router/Navigation/Navigation";
 import SmallMessenger from "src/features/Router/SmallMessenger/SmallMessenger";
+import Messenger from "src/features/Messenger/Messenger";
 
 const Router: React.FC = () => (
   <>
     <Header />
     <main>
       <Navigation />
-      <div className="container main">
-        <Routes>
-          <Route path="/" element={<Profile />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/messenger/*" element={<Messenger />} />
+      </Routes>
       <SmallMessenger />
     </main>
   </>

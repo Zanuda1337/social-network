@@ -1,0 +1,33 @@
+.message {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  padding: .4rem 0;
+  cursor: unset;
+  user-select: text;
+
+  .block {
+    background: var(--main);
+    padding: .7rem 1.5rem;
+    border-radius: 1.5rem;
+    max-width: calc(10rem + 42%);
+    p {
+      cursor: text;
+      color: var(--background-light);
+      font-size: 1.4rem;
+      font-weight: 600;
+      line-height: 1.5;
+      text-align: start;
+    }
+  }
+}
+
+.message-companion {
+  justify-content: start;
+  .block {
+    background: var(--background-light);
+    p {
+      color: var(--foreground);
+    }
+  }
+}
