@@ -41,7 +41,7 @@
 .input_active {
   border-bottom: 1px solid rgba(0,0,0,0);
 }
-.input:after {
+.input:before {
   transition: .3s;
   content: '';
   position: absolute;
@@ -53,9 +53,13 @@
   right: 0;
   margin: 0 auto;
 }
-.input_active:after {
+.input_active:before {
   width: 100%;
 }
 .input:hover {
   border-bottom: 1px solid rgba(0,0,0,0.35);
+}
+
+.input_error {
+  border-color: var(--);
 }

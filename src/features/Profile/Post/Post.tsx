@@ -35,7 +35,7 @@ const Post: React.FC<TPostProps> = ({ post }) => {
   return (
     <div className={`${classes["post"]} block`}>
       <div className={classes.information}>
-        <Avatar className={classes.avatar} />
+        <Avatar src={null} className={classes.avatar} />
         <div className={classes.name}>
           <p>{post.authorName}</p>
           <p>{formatDate(getLocalDate(post.date))}</p>

@@ -12,9 +12,16 @@ export const isYearPassed = (comparedDate: number) => {
   const comparedYear = Number(format(getLocalDate(comparedDate), "yyyy"));
   return currentYear - comparedYear > 0;
 };
+export const isMonthPassed = (comparedDate: number) => {
+  const currentMonth = Number(format(Date.now(), "M"));
+  const comparedMonth = Number(format(getLocalDate(comparedDate), "M"));
+  if (isYearPassed(comparedDate)) return true;
+  return currentMonth - comparedMonth > 0;
+};
 export const isDayPassed = (comparedDate: number) => {
   const currentDay = Number(format(Date.now(), "dd"));
   const comparedDay = Number(format(getLocalDate(comparedDate), "dd"));
+  if (isMonthPassed(comparedDate)) return true;
   return currentDay - comparedDay > 0;
 };
 export const isHourPassed = (comparedDate: number) =>

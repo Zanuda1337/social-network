@@ -1,38 +1,28 @@
 import React from "react";
 import classes from "./Navigation.module.scss";
-import Avatar from "src/components/Avatar/Avatar";
 import SvgSelector from "src/components/SvgSelector/SvgSelector";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "src/hooks/hooks";
+import UserLinks from "src/features/Navigation/UserLinks/UserLinks";
+import UserLinksSkeleton from "src/features/Navigation/UserLinks/UserLinksSkeleton";
+import { userSelector } from "src/redux/reducers/User.slice";
 
 const Navigation: React.FC = () => {
-  const profile = useAppSelector((state) => state.profile);
+  const user = useAppSelector(userSelector);
+
   return (
     <div className="sidebar">
       <div className="wrapper">
-        <div className={classes.profile}>
-          <NavLink to="profile" className={classes.block}>
-            <Avatar />
-            <div className={classes.text}>
-              <p>{profile.userName}</p>
-              <p>{profile.uniqueUrlName}</p>
-            </div>
-          </NavLink>
-          <div className={`${classes.block} ${classes.counters}`}>
-            <NavLink to="/profile">
-              <p>5.5k</p>
-              <p>Friends</p>
-            </NavLink>
-            <NavLink to="/profile">
-              <p>55k</p>
-              <p>Followers</p>
-            </NavLink>
-            <NavLink to="/profile">
-              <p>112</p>
-              <p>Posts</p>
-            </NavLink>
-          </div>
-        </div>
+        {user.isUserFetching ? (
+          <UserLinksSkeleton />
+        ) : (
+          <UserLinks
+            userId={user.userId}
+            photo={user.photos.small}
+            uniqueUrlName={user.uniqueUrlName}
+            name={user.name}
+          />
+        )}
         <nav>
           <ul>
             <li>

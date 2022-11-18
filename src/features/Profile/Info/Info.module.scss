@@ -2,10 +2,13 @@
   overflow: hidden;
   padding: 1rem 1rem 0 1rem;
   position: relative;
-  img {
-    max-height:25rem;
+  img, div {
+    height: 25.25rem;
     border-radius: 1.4rem;
     width: 100%;
+  }
+  img {
+    height: 25rem;
     object-fit: cover;
     object-position: center;
   }
@@ -92,6 +95,11 @@
       width: 7rem;
       justify-content: center;
       align-items: center;
+      display: flex;
+      .preloader {
+        height: 1.85rem;
+        stroke: var(--auth-background);
+      }
     }
   }
 }
@@ -136,3 +144,30 @@
     left: 1.3rem;
   }
 }
+
+.skeleton-subtext {
+  width: 9rem;
+  height: 1.4rem;
+}
+.skeleton-text {
+  width: 15rem;
+  height: 3rem;
+  margin-top: .8rem;
+}
+
+.skeleton-status {
+  width: 25rem;
+  height: 1.6rem;
+  margin-top: 1.2rem;
+}
+.skeleton-button {
+  width: 4rem;
+  height: 4rem;
+}
+
+.preloader-small {
+  fill: var(--auth-background);
+  height: 2.5rem;
+  margin-bottom: 1.1rem;
+}
+

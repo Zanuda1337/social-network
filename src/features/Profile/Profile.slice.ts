@@ -1,23 +1,92 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IPost } from "src/features/Profile/Profile.types";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  IGetProfileResponse,
+  IPost,
+  TProfile,
+} from "src/features/Profile/Profile.types";
 import { AppThunk } from "src/redux/store";
+import { instance } from "src/api/api";
 
-export interface IProfileState {
-  userId: number;
-  userName: string;
+export const fetchProfile = createAsyncThunk(
+  "profile/fetchProfile",
+  async (userId: number, thunkAPI) => {
+    try {
+      const { data } = await instance.get<IGetProfileResponse>(
+        `profile/${userId}`
+      );
+      return data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+export const fetchProfileStatus = createAsyncThunk(
+  "profile/fetchProfileStatus",
+  async (userId: number, thunkAPI) => {
+    try {
+      const { data } = await instance.get<string | null>(
+        `profile/status/${userId}`
+      );
+      return data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+const putProfileStatus = createAsyncThunk(
+  "profile/updateProfileStatus",
+  async (status: string, thunkAPI) => {
+    try {
+      const { data } = await instance.put<{
+        resultCode: number;
+        messages: string[] | null;
+        data: [];
+      }>(`profile/status`, { status });
+      return data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export interface IProfileState extends TProfile {
   uniqueUrlName: string;
-  status: string;
+  status: string | null;
+  statusInput: string;
   postText: string;
   posts: IPost[];
+  isProfileFetching: boolean;
+  isStatusUpdating: boolean;
+  isStatusEditing: boolean;
 }
 
 const initialState: IProfileState = {
   userId: 1,
-  userName: "Ivan Pashkin",
-  uniqueUrlName: "@Zanuda1337",
-  status:
-    "So much depends upon a red wheel barrow glazed with rain water beside the white chickens",
+  fullName: "",
+  aboutMe: null,
+  contacts: {
+    facebook: null,
+    website: null,
+    vk: null,
+    twitter: null,
+    instagram: null,
+    youtube: null,
+    github: null,
+    mainLink: null,
+  },
+  lookingForAJob: true,
+  lookingForAJobDescription: null,
+  photos: {
+    small: null,
+    large: null,
+  },
+  uniqueUrlName: "@Zanuda",
+  status: null,
+  statusInput: "kekmek",
   postText: "",
+  isProfileFetching: false,
+  isStatusUpdating: false,
+  isStatusEditing: false,
   posts: [
     {
       id: 1,
@@ -59,6 +128,12 @@ export const profileSlice = createSlice({
     setStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload;
     },
+    setStatusInput: (state, action: PayloadAction<string>) => {
+      state.statusInput = action.payload;
+    },
+    setStatusEditing: (state, action: PayloadAction<boolean>) => {
+      state.isStatusEditing = action.payload;
+    },
     createPost: (state, action: PayloadAction<IPost>) => {
       action.payload.id = state.posts[state.posts.length - 1].id + 1;
       state.posts.push(action.payload);
@@ -67,9 +142,31 @@ export const profileSlice = createSlice({
       state.postText = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchProfile.pending, (state) => {
+      state.isProfileFetching = true;
+    });
+    builder.addCase(fetchProfile.fulfilled, (state, { payload }) => {
+      Object.assign(state, payload);
+      state.isProfileFetching = false;
+    });
+    builder.addCase(fetchProfileStatus.fulfilled, (state, { payload }) => {
+      state.status = payload;
+    });
+    builder.addCase(putProfileStatus.pending, (state) => {
+      state.isStatusUpdating = true;
+    });
+    builder.addCase(putProfileStatus.fulfilled, (state, { payload }) => {
+      if (payload.resultCode === 0) {
+        state.status = state.statusInput;
+      }
+      state.isStatusUpdating = false;
+    });
+  },
 });
 
-export const { setStatus, setPostText } = profileSlice.actions;
+export const { setStatus, setStatusInput, setPostText, setStatusEditing } =
+  profileSlice.actions;
 const { createPost } = profileSlice.actions;
 
 export const addPost =
@@ -77,6 +174,11 @@ export const addPost =
   (dispatch) => {
     dispatch(createPost(post));
     dispatch(setPostText(""));
+  };
+export const updateProfileStatus =
+  (): AppThunk => async (dispatch, getState) => {
+    await dispatch(putProfileStatus(getState().profile.statusInput));
+    dispatch(setStatusEditing(false));
   };
 
 export default profileSlice.reducer;

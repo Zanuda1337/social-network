@@ -5,18 +5,66 @@ import React, { useState } from "react";
 import { useClickAway } from "src/hooks/hooks";
 import clsx from "clsx";
 import { IProfileState } from "src/features/Profile/Profile.slice";
+import SvgSelector from "src/components/SvgSelector/SvgSelector";
 
 type TInfoProps = {
-  profile: IProfileState;
+  status: string | null;
+  statusInput: string;
+  uniqueUrlName: string;
+  userName: string;
+  isCurrentUserProfile: boolean;
+  photos: { small: null | string; large: null | string };
+  isStatusUpdating: boolean;
+  isEdit: boolean;
+  onStatusClick: () => void;
+  onClickAwayStatus: () => void;
   onStatusChange: (status: string) => void;
+  onStatusInputChange: (status: string) => void;
 };
 
-const Info: React.FC<TInfoProps> = ({ profile, onStatusChange }) => {
-  const [isEdit, setEdit] = useState<boolean>(false);
-  const [input, setInput] = useState<string>(profile.status);
+const Info: React.FC<TInfoProps> = ({
+  status,
+  statusInput,
+  uniqueUrlName,
+  isCurrentUserProfile,
+  photos,
+  userName,
+  isStatusUpdating,
+  isEdit,
+  onClickAwayStatus,
+  onStatusClick,
+  onStatusChange,
+  onStatusInputChange,
+}) => {
   const editor: React.RefObject<HTMLDivElement> = useClickAway(() =>
-    setEdit(false)
+    onClickAwayStatus()
   );
+
+  const changeStatusButton = status ? (
+    <button
+      onClick={() => {
+        onStatusClick();
+        // setInput(status);
+      }}
+      className={classes.status}
+    >
+      {status}
+    </button>
+  ) : (
+    <button
+      onClick={() => {
+        onStatusClick();
+      }}
+      className={clsx(classes.status, classes["set-status"])}
+    >
+      Set status
+    </button>
+  );
+
+  const getStatusElement = () => {
+    if (isCurrentUserProfile) return changeStatusButton;
+    else return <div className={classes.status}>{status}</div>;
+  };
 
   return (
     <div className={`block`}>
@@ -24,12 +72,12 @@ const Info: React.FC<TInfoProps> = ({ profile, onStatusChange }) => {
         <img src={headerPicture} alt="" />
       </div>
       <div className={classes.info}>
-        <Avatar className={classes.avatar} />
-        <p>{profile.uniqueUrlName}</p>
+        <Avatar src={photos.large} className={classes.avatar} />
+        <p>{uniqueUrlName}</p>
       </div>
       <div className={classes.about}>
         <div>
-          <p>{profile.userName}</p>
+          <p>{userName}</p>
           <p className={classes.online}>Last online 22 minutes ago</p>
         </div>
         {isEdit && (
@@ -37,44 +85,29 @@ const Info: React.FC<TInfoProps> = ({ profile, onStatusChange }) => {
             <input
               type="text"
               className={classes.status}
-              value={input}
+              value={statusInput}
               onChange={(event) =>
-                setInput(event.target.value.substring(0, 100))
+                onStatusInputChange(event.target.value.substring(0, 100))
               }
               autoFocus={true}
               onFocus={(event) => event.target.select()}
             />
             <button
               onClick={() => {
-                setEdit(false);
-                onStatusChange(input.trim());
+                onStatusChange(statusInput.trim());
               }}
               className={classes.button}
+              disabled={isStatusUpdating}
             >
-              save
+              {isStatusUpdating ? (
+                <SvgSelector className={classes.preloader} id="preloader" />
+              ) : (
+                "save"
+              )}
             </button>
           </div>
         )}
-        {profile.status ? (
-          <button
-            onClick={() => {
-              setEdit(true);
-              setInput(profile.status);
-            }}
-            className={classes.status}
-          >
-            {profile.status}
-          </button>
-        ) : (
-          <button
-            onClick={() => {
-              setEdit(true);
-            }}
-            className={clsx(classes.status, classes["set-status"])}
-          >
-            Set status
-          </button>
-        )}
+        {getStatusElement()}
       </div>
       <div className={classes.separator} />
       <div className={classes.footer}>

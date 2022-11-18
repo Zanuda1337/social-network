@@ -1,20 +1,34 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import "./App.scss";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Auth from "./features/Auth/Auth";
 import "src/assets/css/reset.css";
 import "src/assets/css/global.scss";
+import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
+import { fetchUserApi } from "src/redux/reducers/User.slice";
+import { authMeApi, authSelector } from "src/features/Auth/Auth.slice";
 import Router from "src/features/Router/Router";
+import SvgSelector from "src/components/SvgSelector/SvgSelector";
 
 const App = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/auth/*" element={<Auth />} />
-        <Route path="/*" element={<Router />} />
-      </Routes>
-    </BrowserRouter>
+  const auth = useAppSelector(authSelector);
+  const dispatch = useAppDispatch();
+  const setAuth = useCallback(() => dispatch(authMeApi()), [dispatch]);
+  const setUser = useCallback(
+    (id: number) => dispatch(fetchUserApi(id)),
+    [dispatch]
   );
+
+  useEffect(() => {
+    setAuth();
+    if (auth.userId) setUser(auth.userId);
+  }, [auth.isLoggedIn]);
+
+  if (auth.isFetching)
+    return (
+      <div className="preloader preloader_app">
+        <SvgSelector id="preloader" />
+      </div>
+    );
+  return <Router auth={auth} />;
 };
 
 export default App;

@@ -16,6 +16,7 @@
   --light-gray: #EFEFEF;
   --light-telegray: #D0D0D0;
   --light-gray2: #B8B8B8;
+  --red: #e54d4d;
 
   --gray: #CCD5DE;
   /* ------ THEME ------ */
@@ -29,6 +30,7 @@
   --separator-common: var(--gray);
   --scrollbar: var(--light-telegray);
   --scrollbar-active: var(--light-gray2);
+  --common-warning: var(--red);
 
 
   --indent: 2.5rem;
@@ -109,7 +111,6 @@ main {
     border-radius: 50%;
     position: relative;
   }
-
   div:before, div:after {
     content: '';
     position: absolute;
@@ -142,6 +143,63 @@ main {
       font-size: 1.2rem;
       font-weight: 600;
     }
+  }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  color: transparent !important;
+  border-radius: .5rem;
+  background: var(--auth-background) !important;
+}
+
+.skeleton:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -150%;
+  margin: auto 0;
+  background: linear-gradient(to left,
+          transparent 0%,
+          rgba(255,255,255, 0.5) 30%,
+          rgba(255,255,255, 0.5) 70%,
+          transparent) 100%;
+  width: 20rem;
+  height: 100%;
+  animation: preloader 1s ease-out infinite;
+  animation-delay: 0.3s;
+}
+
+.preloader {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  svg {
+  width: 10rem;
+  height: 10rem;
+  margin: auto;
+  stroke: var(--auth-background)
+
+  }
+}
+
+.preloader_app {
+  height: 100vh;
+  align-items: center;
+}
+
+.preloader-small {
+  width: 2rem;
+}
+
+@keyframes preloader {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 100%;
   }
 }
 

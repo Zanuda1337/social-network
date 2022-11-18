@@ -2,8 +2,12 @@ import React from "react";
 import classes from "./Header.module.scss";
 import SvgSelector from "src/components/SvgSelector/SvgSelector";
 import { NavLink } from "react-router-dom";
+import Avatar from "src/components/Avatar/Avatar";
+import { useAppSelector } from "src/hooks/hooks";
 
 const Header: React.FC = () => {
+  const user = useAppSelector((state) => state.user);
+
   return (
     <header>
       <NavLink to="/feed" className={`sidebar ${classes["sidebar-header"]}`}>
@@ -30,7 +34,7 @@ const Header: React.FC = () => {
           </button>
         </div>
         <button className={classes.profile}>
-          <div className={classes["logo-image"]}></div>
+          <Avatar className={classes.avatar} src={user.photos.small} />
           <p>❮</p>
         </button>
       </div>

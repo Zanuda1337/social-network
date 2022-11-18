@@ -29,7 +29,7 @@
 .text {
   display: flex;
   flex-direction: column;
-  padding-left: 1.2rem;
+  margin-left: 1.2rem;
   p {
     margin: .15rem 0;
     text-align: left;
@@ -113,4 +113,8 @@ nav {
       stroke: var(--background-light);
     }
   }
+}
+
+.skeleton {
+  height: 12.15rem;
 }
