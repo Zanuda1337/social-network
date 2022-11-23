@@ -1,9 +1,6 @@
-export interface IAuthMeResponse {
-  data: {
-    id: number;
-    login: string;
-    email: string;
-  };
-  resultCode: number;
-  messages: string[];
+export interface ILoginFields {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+  captcha?: string;
 }

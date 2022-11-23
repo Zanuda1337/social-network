@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useCallback } from "react";
 import classes from "./Header.module.scss";
 import SvgSelector from "src/components/SvgSelector/SvgSelector";
 import { NavLink } from "react-router-dom";
 import Avatar from "src/components/Avatar/Avatar";
-import { useAppSelector } from "src/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
+import { authSelector, logout } from "src/features/Auth/Auth.slice";
 
 const Header: React.FC = () => {
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector(authSelector);
+  const dispatch = useAppDispatch();
+
+  const handleLogout = useCallback(() => dispatch(logout()), [dispatch]);
 
   return (
     <header>
@@ -33,7 +37,7 @@ const Header: React.FC = () => {
             <SvgSelector id="bell" />
           </button>
         </div>
-        <button className={classes.profile}>
+        <button className={classes.profile} onClick={handleLogout}>
           <Avatar className={classes.avatar} src={user.photos.small} />
           <p>❮</p>
         </button>

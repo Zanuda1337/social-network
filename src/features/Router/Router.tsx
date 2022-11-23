@@ -9,13 +9,15 @@ import Users from "src/features/Users/Users";
 import Auth from "src/features/Auth/Auth";
 import { IAuthState } from "src/features/Auth/Auth.slice";
 import ProtectedRoute from "src/components/ProtectedRoute/ProtectedRoute";
+import Alerts from "src/features/Alerts/Alerts";
 
 type TRouterProps = {
   auth: IAuthState;
 };
 
-const Router: React.FC<TRouterProps> = ({ auth }) => {
-  return (
+const Router: React.FC<TRouterProps> = ({ auth }) => (
+  <>
+    <Alerts />
     <BrowserRouter>
       <Routes>
         <Route
@@ -48,7 +50,7 @@ const Router: React.FC<TRouterProps> = ({ auth }) => {
         />
       </Routes>
     </BrowserRouter>
-  );
-};
+  </>
+);
 
 export default Router;

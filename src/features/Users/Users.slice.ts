@@ -5,7 +5,7 @@ import {
 } from "src/features/Users/Users.types";
 import { instance } from "src/api/api";
 import { convertBackToFrontUsers } from "src/features/Users/Users.utils";
-import { TResponse } from "src/api/types";
+import { TDefaultResponse } from "src/api/types";
 import { AppThunk } from "src/redux/store";
 
 export const fetchUsersApi = createAsyncThunk(
@@ -25,7 +25,9 @@ export const followApi = createAsyncThunk(
   "users/follow",
   async (userId: number, thunkAPI) => {
     try {
-      const { data } = await instance.post<TResponse>(`follow/${userId}`);
+      const { data } = await instance.post<TDefaultResponse>(
+        `follow/${userId}`
+      );
       return { ...data, userId };
     } catch (error: any) {
       return thunkAPI.rejectWithValue({ error: error.message });
@@ -36,7 +38,9 @@ export const unfollowApi = createAsyncThunk(
   "users/unfollow",
   async (userId: number, thunkAPI) => {
     try {
-      const { data } = await instance.delete<TResponse>(`follow/${userId}`);
+      const { data } = await instance.delete<TDefaultResponse>(
+        `follow/${userId}`
+      );
       return { ...data, userId };
     } catch (error: any) {
       return thunkAPI.rejectWithValue({ error: error.message });

@@ -5,15 +5,15 @@ import { NavLink } from "react-router-dom";
 import { useAppSelector } from "src/hooks/hooks";
 import UserLinks from "src/features/Navigation/UserLinks/UserLinks";
 import UserLinksSkeleton from "src/features/Navigation/UserLinks/UserLinksSkeleton";
-import { userSelector } from "src/redux/reducers/User.slice";
+import { authSelector } from "src/features/Auth/Auth.slice";
 
 const Navigation: React.FC = () => {
-  const user = useAppSelector(userSelector);
+  const user = useAppSelector(authSelector);
 
   return (
     <div className="sidebar">
       <div className="wrapper">
-        {user.isUserFetching ? (
+        {user.isFetching ? (
           <UserLinksSkeleton />
         ) : (
           <UserLinks

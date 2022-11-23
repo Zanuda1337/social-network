@@ -1,23 +1,30 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import classes from "./TextField.module.scss";
 import clsx from "clsx";
+import Message from "src/components/TextField/Message/Message";
 
 type TTextFieldProps = {
+  value?: string;
   placeholder: string;
   type: "text" | "password" | "email";
   disabled?: boolean;
   error?: boolean;
   message?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
 };
 
 const TextField: React.FC<TTextFieldProps> = ({
+  value = "",
   placeholder,
   type,
   disabled = false,
-  error,
+  error = false,
+  message,
+  onChange,
+  onBlur,
 }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [input, setInput] = useState<string>("");
   return (
     <div
       className={clsx({
@@ -28,16 +35,19 @@ const TextField: React.FC<TTextFieldProps> = ({
     >
       <p>{placeholder}</p>
       <input
+        value={value}
         type={type}
         disabled={disabled}
         onFocus={() => setIsActive(true)}
-        onBlur={() => setIsActive(!!input.length)}
-        onChange={(event) => {
-          setInput(event.target.value);
+        onBlur={(event) => {
+          setIsActive(!!value.length);
+          onBlur && onBlur();
         }}
+        onChange={onChange}
       />
+      {message && <Message message={message} />}
     </div>
   );
 };
 
-export default TextField;
+export default React.memo(TextField);

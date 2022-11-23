@@ -1,53 +1,50 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  IGetProfileResponse,
-  IPost,
-  TProfile,
-} from "src/features/Profile/Profile.types";
-import { AppThunk } from "src/redux/store";
-import { instance } from "src/api/api";
+import { IPost, TProfile } from "src/features/Profile/Profile.types";
+import { AppThunk, RootState } from "src/redux/store";
+import { TDefaultResponse } from "src/api/types";
+import profileApi from "src/api/profileApi/profileApi";
+import { IGetProfileResponse } from "src/api/profileApi/profileApi.types";
+import { addAlert } from "../Alerts/Alerts.slice";
 
-export const fetchProfile = createAsyncThunk(
-  "profile/fetchProfile",
-  async (userId: number, thunkAPI) => {
-    try {
-      const { data } = await instance.get<IGetProfileResponse>(
-        `profile/${userId}`
-      );
-      return data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue({ error: error.message });
-    }
+export const fetchProfile = createAsyncThunk<
+  IGetProfileResponse,
+  number,
+  { rejectValue: string }
+>("profile/fetchProfile", async (userId: number, { rejectWithValue }) => {
+  try {
+    const { data } = await profileApi.getProfile(userId);
+    return data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
   }
-);
-export const fetchProfileStatus = createAsyncThunk(
-  "profile/fetchProfileStatus",
-  async (userId: number, thunkAPI) => {
-    try {
-      const { data } = await instance.get<string | null>(
-        `profile/status/${userId}`
-      );
-      return data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue({ error: error.message });
-    }
+});
+export const fetchProfileStatus = createAsyncThunk<
+  string | null,
+  number,
+  {
+    rejectValue: string;
   }
-);
-const putProfileStatus = createAsyncThunk(
-  "profile/updateProfileStatus",
-  async (status: string, thunkAPI) => {
-    try {
-      const { data } = await instance.put<{
-        resultCode: number;
-        messages: string[] | null;
-        data: [];
-      }>(`profile/status`, { status });
-      return data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue({ error: error.message });
-    }
+>("profile/fetchProfileStatus", async (userId, { rejectWithValue }) => {
+  try {
+    const { data } = await profileApi.getStatus(userId);
+    return data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
   }
-);
+});
+export const putProfileStatus = createAsyncThunk<
+  TDefaultResponse,
+  string,
+  { rejectValue: string; state: RootState }
+>("profile/updateProfileStatus", async (status, { rejectWithValue }) => {
+  try {
+    const { data } = await profileApi.updateStatus(status);
+    if (data.resultCode !== 0) return rejectWithValue(data.messages.join());
+    return data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
 
 export interface IProfileState extends TProfile {
   uniqueUrlName: string;
@@ -125,9 +122,6 @@ export const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {
-    setStatus: (state, action: PayloadAction<string>) => {
-      state.status = action.payload;
-    },
     setStatusInput: (state, action: PayloadAction<string>) => {
       state.statusInput = action.payload;
     },
@@ -150,22 +144,34 @@ export const profileSlice = createSlice({
       Object.assign(state, payload);
       state.isProfileFetching = false;
     });
+    builder.addCase(fetchProfile.rejected, (state, { payload }) => {
+      console.error(payload);
+      state.isProfileFetching = false;
+    });
+
     builder.addCase(fetchProfileStatus.fulfilled, (state, { payload }) => {
       state.status = payload;
     });
+    builder.addCase(fetchProfileStatus.rejected, (state, { payload }) => {
+      console.error(payload);
+    });
+
     builder.addCase(putProfileStatus.pending, (state) => {
       state.isStatusUpdating = true;
     });
     builder.addCase(putProfileStatus.fulfilled, (state, { payload }) => {
-      if (payload.resultCode === 0) {
-        state.status = state.statusInput;
-      }
+      state.status = state.statusInput;
+      state.isStatusUpdating = false;
+      state.isStatusEditing = false;
+    });
+    builder.addCase(putProfileStatus.rejected, (state, { payload }) => {
+      console.error(payload);
       state.isStatusUpdating = false;
     });
   },
 });
 
-export const { setStatus, setStatusInput, setPostText, setStatusEditing } =
+export const { setStatusInput, setPostText, setStatusEditing } =
   profileSlice.actions;
 const { createPost } = profileSlice.actions;
 
@@ -175,10 +181,22 @@ export const addPost =
     dispatch(createPost(post));
     dispatch(setPostText(""));
   };
+
+export const getProfileData =
+  (userId: number): AppThunk =>
+  async (dispatch) => {
+    await dispatch(fetchProfile(userId));
+    await dispatch(fetchProfileStatus(userId));
+  };
 export const updateProfileStatus =
   (): AppThunk => async (dispatch, getState) => {
-    await dispatch(putProfileStatus(getState().profile.statusInput));
-    dispatch(setStatusEditing(false));
+    await dispatch(putProfileStatus(getState().profile.statusInput))
+      .unwrap()
+      .catch((payload) =>
+        dispatch(addAlert({ type: "error", message: payload }))
+      );
   };
+
+export const profileSelector = (state: RootState) => state.profile;
 
 export default profileSlice.reducer;

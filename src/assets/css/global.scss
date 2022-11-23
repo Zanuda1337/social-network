@@ -16,7 +16,9 @@
   --light-gray: #EFEFEF;
   --light-telegray: #D0D0D0;
   --light-gray2: #B8B8B8;
-  --red: #e54d4d;
+  --red3: #ee5757;
+  --red: #f69595;
+  --red2: #f1c1c1;
 
   --gray: #CCD5DE;
   /* ------ THEME ------ */
@@ -30,7 +32,9 @@
   --separator-common: var(--gray);
   --scrollbar: var(--light-telegray);
   --scrollbar-active: var(--light-gray2);
+  --common-error: var(--red3);
   --common-warning: var(--red);
+  --common-warning-highlighted: var(--red2);
 
 
   --indent: 2.5rem;
@@ -248,6 +252,6 @@ main {
 
 @media(max-width: 440px) {
   *, *:after, *:before {
-    font-size: calc(5px + 5 * (100vw / 1920));
+    font-size: calc(6px + 4 * (100vw / 1920));
   }
 }

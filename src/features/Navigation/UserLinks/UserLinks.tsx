@@ -6,8 +6,8 @@ import Avatar from "src/components/Avatar/Avatar";
 interface IUserLinksProps {
   userId: number | null;
   photo: string | null;
-  name: string;
-  uniqueUrlName: string;
+  name: string | null;
+  uniqueUrlName: string | null;
 }
 
 const UserLinks: React.FC<IUserLinksProps> = ({

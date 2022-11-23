@@ -8,7 +8,7 @@ export interface IPost {
   commentsCount: number;
   repostsCount: number;
 }
-export interface IGetProfileResponse extends TProfile {}
+
 export type TProfile = {
   userId: number;
   aboutMe: string | null;

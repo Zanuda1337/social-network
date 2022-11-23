@@ -1,5 +1,5 @@
-export type TResponse = {
+export type TDefaultResponse = {
   resultCode: number;
   messages: string[];
-  data: [];
+  data: {};
 };
