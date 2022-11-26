@@ -5,52 +5,38 @@ import { IGetProfileResponse } from "src/api/profileApi/profileApi.types";
 import profileApi from "src/api/profileApi/profileApi";
 import authApi from "src/api/authApi/authApi";
 import { TDefaultResponse } from "src/api/types";
-import { IAuthMeResponse, ILoginResponse } from "src/api/authApi/authApi.types";
+import { ILoginResponse } from "src/api/authApi/authApi.types";
 
-const fetchUser = createAsyncThunk<
-  IGetProfileResponse,
-  number,
-  {
-    rejectValue: string;
+const fetchUser = createAsyncThunk(
+  "profile/fetchUser",
+  async (userId: number, { rejectWithValue }) => {
+    try {
+      const { data } = await profileApi.getProfile(userId);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
   }
->("profile/fetchUser", async (userId, { rejectWithValue }) => {
-  try {
-    const { data } = await profileApi.getProfile(userId);
-    return data;
-  } catch (error: any) {
-    return rejectWithValue(error.message);
-  }
-});
+);
 
-export const authMe = createAsyncThunk<
-  IAuthMeResponse,
-  void,
-  {
-    rejectValue: string;
-    dispatch: AppDispatch;
+export const authMe = createAsyncThunk(
+  "auth/authMe",
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await authApi.me();
+      if (data.resultCode !== 0) return rejectWithValue(data.messages.join());
+      await dispatch(fetchUser(data.data.id));
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
   }
->("auth/authMe", async (_, { rejectWithValue, dispatch }) => {
-  try {
-    const { data } = await authApi.me();
-    if (data.resultCode !== 0) return rejectWithValue(data.messages.join());
-    dispatch(fetchUser(data.data.id));
-    return data;
-  } catch (error: any) {
-    return rejectWithValue(error.message);
-  }
-});
+);
 
-export const login = createAsyncThunk<
-  ILoginResponse,
-  ILoginFields,
-  {
-    rejectValue: string;
-    dispatch: AppDispatch;
-  }
->(
+export const login = createAsyncThunk(
   "auth/login",
   async (
-    { email, password, rememberMe, captcha },
+    { email, password, rememberMe, captcha }: ILoginFields,
     { rejectWithValue, dispatch }
   ) => {
     try {
@@ -65,7 +51,7 @@ export const login = createAsyncThunk<
         data.resultCode === 10 && (await dispatch(getCaptcha()));
         return rejectWithValue(data.messages.join());
       }
-      dispatch(authMe());
+      await dispatch(authMe());
       return data;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -73,32 +59,30 @@ export const login = createAsyncThunk<
   }
 );
 
-export const logout = createAsyncThunk<
-  TDefaultResponse,
-  void,
-  { rejectValue: string; dispatch: AppDispatch }
->("auth/logout", async (_, { rejectWithValue, dispatch }) => {
-  try {
-    const { data } = await authApi.logout();
-    if (data.resultCode !== 0) rejectWithValue("Server error");
-    dispatch(authMe());
-    return data;
-  } catch (error: any) {
-    return rejectWithValue(error.message);
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await authApi.logout();
+      if (data.resultCode !== 0) rejectWithValue("Server error");
+      dispatch(authMe());
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
   }
-});
-const getCaptcha = createAsyncThunk<
-  { url: string },
-  void,
-  { rejectValue: string }
->("auth/getCaptcha", async (_, { rejectWithValue }) => {
-  try {
-    const { data } = await authApi.getCaptcha();
-    return data;
-  } catch (error: any) {
-    return rejectWithValue(error.message);
+);
+const getCaptcha = createAsyncThunk(
+  "auth/getCaptcha",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await authApi.getCaptcha();
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export interface IAuthState {
   userId: number | null;
