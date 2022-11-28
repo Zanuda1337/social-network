@@ -31,3 +31,14 @@
     }
   }
 }
+
+@media(max-width: 480px) {
+  .message {
+    .block {
+      p {
+        font-size: 1.5rem;
+      }
+    }
+
+  }
+}

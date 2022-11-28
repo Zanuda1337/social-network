@@ -88,4 +88,37 @@
   .dialogs {
     width: 100%;
   }
+  .search {
+    padding: 0.75rem 1.4rem;
+    margin-left: 2rem;
+    svg {
+      height: 1.7rem;
+      margin-right: 1rem;
+    }
+    input {
+      font-size: 1.6rem;
+      font-weight: 500;
+    }
+  }
+  .header {
+    .options {
+      min-width: 3rem;
+
+      div {
+        height: 0.3rem;
+      }
+
+      div:after {
+        bottom: 0.75rem;
+      }
+
+      div:before {
+        top: 0.75rem;
+      }
+    }
+    .options:after {
+      height: 2.7rem;
+      width: 2.7rem;
+    }
+  }
 }

@@ -449,6 +449,11 @@ const SvgSelector: React.FC<TSvgSelectorProps> = ({ id, className, style }) => {
         <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 18h-2v-8h2v8zm-1-12.25c.69 0 1.25.56 1.25 1.25s-.56 1.25-1.25 1.25-1.25-.56-1.25-1.25.56-1.25 1.25-1.25z" />
       </svg>
     ),
+    burger: (
+      <svg viewBox="0 0 50 50" className={className} style={style}>
+        <path d="M 2 9 L 2 11 L 48 11 L 48 9 L 2 9 z M 2 24 L 2 26 L 48 26 L 48 24 L 2 24 z M 2 39 L 2 41 L 48 41 L 48 39 L 2 39 z" />
+      </svg>
+    ),
   };
 
   if (!svgMap.hasOwnProperty(id)) {

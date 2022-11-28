@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef } from "react";
 import classes from "./Chat.module.scss";
 import Avatar from "src/components/Avatar/Avatar";
 import SvgSelector from "src/components/SvgSelector/SvgSelector";
 import clsx from "clsx";
-import { NavLink, redirect, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Message from "src/features/Messenger/Chat/Message/Message";
 import { TMessage } from "src/features/Messenger/Messenger.types";
 import { useWindowSize } from "src/hooks/hooks";
@@ -28,7 +28,7 @@ const Chat: React.FC<TChatProps> = ({
   onSendMessage,
 }) => {
   const screenSize = useWindowSize();
-  const isScreenSmall = screenSize.x < 480;
+  const isMobile = screenSize.x <= 480;
   const navigate = useNavigate();
 
   const messagesDiv = useRef<HTMLDivElement>(null);
@@ -56,12 +56,12 @@ const Chat: React.FC<TChatProps> = ({
     <div className={classes.chat}>
       <div className={classes.header}>
         <div className={"user"}>
-          {isScreenSmall && (
+          {isMobile && (
             <NavLink to="/messenger" className={classes.button}>
               ❮
             </NavLink>
           )}
-          <Avatar />
+          <Avatar src={null} />
           <div className={"text"}>
             <p className={"title"}>{companion.name}</p>
             <p className={"subtext"}>Last seen 22 minutes ago</p>

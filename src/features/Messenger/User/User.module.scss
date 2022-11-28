@@ -20,3 +20,9 @@
   }
 }
 
+@media(max-width: 480px) {
+  .avatar {
+    width: 5rem;
+    height: 5rem;
+  }
+}

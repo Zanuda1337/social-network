@@ -1,49 +1,44 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  TFrontendUser,
-  TGetUsersResponse,
-} from "src/features/Users/Users.types";
-import { instance } from "src/api/api";
+import { TFrontendUser } from "src/features/Users/Users.types";
 import { convertBackToFrontUsers } from "src/features/Users/Users.utils";
-import { TDefaultResponse } from "src/api/types";
-import { AppThunk } from "src/redux/store";
+import { AppThunk, RootState } from "src/redux/store";
+import usersApi from "src/api/usersApi/usersApi";
 
-export const fetchUsersApi = createAsyncThunk(
+export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
-  async ({ page, limit }: { page: number; limit: number }, thunkAPI) => {
+  async (
+    { page, limit }: { page: number; limit: number },
+    { rejectWithValue }
+  ) => {
     try {
-      const users = await instance.get<TGetUsersResponse>(
-        `users?page=${page}&count=${limit}`
-      );
-      return users.data;
+      const { data } = await usersApi.getUsers(page, limit);
+      return data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue({ error: error.message });
+      return rejectWithValue(error.message);
     }
   }
 );
-export const followApi = createAsyncThunk(
-  "users/follow",
-  async (userId: number, thunkAPI) => {
+export const followUser = createAsyncThunk(
+  "users/followUser",
+  async (userId: number, { rejectWithValue }) => {
     try {
-      const { data } = await instance.post<TDefaultResponse>(
-        `follow/${userId}`
-      );
+      const { data } = await usersApi.follow(userId);
+      if (data.resultCode !== 0) return rejectWithValue(data.messages.join());
       return { ...data, userId };
     } catch (error: any) {
-      return thunkAPI.rejectWithValue({ error: error.message });
+      return rejectWithValue(error.message);
     }
   }
 );
-export const unfollowApi = createAsyncThunk(
-  "users/unfollow",
-  async (userId: number, thunkAPI) => {
+export const unfollowUser = createAsyncThunk(
+  "users/unfollowUser",
+  async (userId: number, { rejectWithValue }) => {
     try {
-      const { data } = await instance.delete<TDefaultResponse>(
-        `follow/${userId}`
-      );
+      const { data } = await usersApi.unfollow(userId);
+      if (data.resultCode !== 0) return rejectWithValue(data.messages.join());
       return { ...data, userId };
     } catch (error: any) {
-      return thunkAPI.rejectWithValue({ error: error.message });
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -75,26 +70,31 @@ export const usersSlice = createSlice({
             (id) => id != action.payload.id
           ));
     },
+    clearUsers: (state) => {
+      state.usersList = [];
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUsersApi.pending, (state) => {
+    builder.addCase(fetchUsers.pending, (state) => {
       state.isUsersFetching = true;
     });
-    builder.addCase(fetchUsersApi.fulfilled, (state, { payload }) => {
-      if (!payload) return;
-      state.usersList = convertBackToFrontUsers(payload.items);
+    builder.addCase(fetchUsers.fulfilled, (state, { payload }) => {
+      state.usersList = [
+        ...state.usersList,
+        ...convertBackToFrontUsers(payload.items),
+      ];
       state.totalCount = payload.totalCount;
       state.isUsersFetching = false;
     });
-    builder.addCase(followApi.pending, (state, { payload }) => {});
-    builder.addCase(followApi.fulfilled, (state, { payload }) => {
+    builder.addCase(followUser.pending, (state, { payload }) => {});
+    builder.addCase(followUser.fulfilled, (state, { payload }) => {
       if (payload.resultCode === 0) {
         state.usersList.map((user) =>
           user.id === payload.userId ? (user.isFollowed = true) : user
         );
       }
     });
-    builder.addCase(unfollowApi.fulfilled, (state, { payload }) => {
+    builder.addCase(unfollowUser.fulfilled, (state, { payload }) => {
       if (payload.resultCode === 0) {
         state.usersList.map((user) =>
           user.id === payload.userId ? (user.isFollowed = false) : user
@@ -108,17 +108,20 @@ export const follow =
   (id: number): AppThunk =>
   async (dispatch) => {
     await dispatch(setFollowingInProgress({ inProgress: true, id }));
-    await dispatch(followApi(id));
+    await dispatch(followUser(id));
     dispatch(setFollowingInProgress({ inProgress: false, id }));
   };
 export const unfollow =
   (id: number): AppThunk =>
   async (dispatch) => {
     await dispatch(setFollowingInProgress({ inProgress: true, id }));
-    await dispatch(unfollowApi(id));
+    await dispatch(unfollowUser(id));
     dispatch(setFollowingInProgress({ inProgress: false, id }));
   };
 
+export const { clearUsers } = usersSlice.actions;
 const { setFollowingInProgress } = usersSlice.actions;
+
+export const usersSelector = (state: RootState) => state.users;
 
 export default usersSlice.reducer;

@@ -1,10 +1,17 @@
 header {
-  height: 8rem;
+  height: var(--header-height);
   background: var(--background-light);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2.2rem 0;
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  top: 0;
+  :global(.sidebar) {
+    height: var(--header-height);
+  }
 }
 .header-container {
   display: flex;

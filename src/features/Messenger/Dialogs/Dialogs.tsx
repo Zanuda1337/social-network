@@ -14,11 +14,11 @@ const Dialogs: React.FC<TDialogsProps> = ({ dialogs }) => {
   const screenSize = useWindowSize();
   const location = useLocation();
   const isDialogsLocation = location.pathname === "/messenger";
-  const isScreenSmall = screenSize.x < 480;
+  const isMobile = screenSize.x <= 480;
 
   const [searchValue, setSearchValue] = useState<string>("");
 
-  if (!isDialogsLocation && isScreenSmall) return <></>;
+  if (!isDialogsLocation && isMobile) return <></>;
 
   return (
     <div className={classes.dialogs}>

@@ -3,12 +3,13 @@
   padding: 1rem 1rem 0 1rem;
   position: relative;
   img, div {
-    height: 25.25rem;
+    min-height: 12.25rem;
+    height: 12vw;
     border-radius: 1.4rem;
     width: 100%;
   }
   img {
-    height: 25rem;
+    min-height: 12rem;
     object-fit: cover;
     object-position: center;
   }

@@ -1,6 +1,5 @@
 import React from "react";
 import classes from "src/features/Navigation/Navigation.module.scss";
-import Avatar from "src/components/Avatar/Avatar";
 import clsx from "clsx";
 
 const UserLinksSkeleton: React.FC = () => (

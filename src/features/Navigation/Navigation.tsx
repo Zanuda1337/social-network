@@ -1,14 +1,17 @@
 import React from "react";
-import classes from "./Navigation.module.scss";
-import SvgSelector from "src/components/SvgSelector/SvgSelector";
-import { NavLink } from "react-router-dom";
-import { useAppSelector } from "src/hooks/hooks";
-import UserLinks from "src/features/Navigation/UserLinks/UserLinks";
-import UserLinksSkeleton from "src/features/Navigation/UserLinks/UserLinksSkeleton";
+import { useAppSelector, useWindowSize } from "src/hooks/hooks";
 import { authSelector } from "src/features/Auth/Auth.slice";
+import MobileNavigation from "src/features/Navigation/MobileNavigation/MobileNavigation";
+import UserLinksSkeleton from "src/features/Navigation/UserLinks/UserLinksSkeleton";
+import UserLinks from "src/features/Navigation/UserLinks/UserLinks";
+import NavigationLink from "src/features/Navigation/NavigationLink/NavigationLink";
 
 const Navigation: React.FC = () => {
   const user = useAppSelector(authSelector);
+  const windowSize = useWindowSize();
+  const isMobile = windowSize.x <= 480;
+
+  if (isMobile) return <MobileNavigation />;
 
   return (
     <div className="sidebar">
@@ -25,69 +28,21 @@ const Navigation: React.FC = () => {
         )}
         <nav>
           <ul>
-            <li>
-              <NavLink
-                to="friends"
-                className={(data) => (data.isActive ? classes.active : "")}
-              >
-                <SvgSelector id="friends" />
-                <p>Friends</p>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/messenger"
-                className={(data) => (data.isActive ? classes.active : "")}
-              >
-                <SvgSelector id="messenger" />
-                <p>Messenger</p>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/communities"
-                className={(data) => (data.isActive ? classes.active : "")}
-              >
-                <SvgSelector id="communities" />
-                <p>Communities</p>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="music"
-                className={(data) => (data.isActive ? classes.active : "")}
-              >
-                <SvgSelector id="audio" />
-                <p>Music</p>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="videos"
-                className={(data) => (data.isActive ? classes.active : "")}
-              >
-                <SvgSelector id="video" />
-                <p>Videos</p>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="feed"
-                className={(data) => (data.isActive ? classes.active : "")}
-              >
-                <SvgSelector id="feed" />
-                <p>Feed</p>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="settings"
-                className={(data) => (data.isActive ? classes.active : "")}
-              >
-                <SvgSelector id="settings" />
-                <p>Settings</p>
-              </NavLink>
-            </li>
+            <NavigationLink to="/friends" svgId="friends" label="Friends" />
+            <NavigationLink
+              to="/messenger"
+              svgId="messenger"
+              label="Messenger"
+            />
+            <NavigationLink
+              to="communities"
+              svgId="communities"
+              label="Communities"
+            />
+            <NavigationLink to="/music" svgId="audio" label="Music" />
+            <NavigationLink to="/videos" svgId="video" label="Videos" />
+            <NavigationLink to="/feed" svgId="feed" label="Feed" />
+            <NavigationLink to="/settings" svgId="settings" label="Settings" />
           </ul>
         </nav>
       </div>

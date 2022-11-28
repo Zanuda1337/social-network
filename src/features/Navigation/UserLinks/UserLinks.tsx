@@ -17,7 +17,7 @@ const UserLinks: React.FC<IUserLinksProps> = ({
   uniqueUrlName,
 }) => (
   <div className={classes.profile}>
-    <NavLink to={`profile/${userId}`} className={classes.block}>
+    <NavLink to={`/profile/${userId}`} className={classes.block}>
       <Avatar src={photo} />
       <div className={classes.text}>
         <p>{name}</p>
@@ -25,15 +25,15 @@ const UserLinks: React.FC<IUserLinksProps> = ({
       </div>
     </NavLink>
     <div className={`${classes.block} ${classes.counters}`}>
-      <NavLink to={`profile/${userId}`}>
+      <NavLink to={`/profile/${userId}`}>
         <p>5.5k</p>
         <p>Friends</p>
       </NavLink>
-      <NavLink to={`profile/${userId}`}>
+      <NavLink to={`/profile/${userId}`}>
         <p>55k</p>
         <p>Followers</p>
       </NavLink>
-      <NavLink to={`profile/${userId}`}>
+      <NavLink to={`/profile/${userId}`}>
         <p>112</p>
         <p>Posts</p>
       </NavLink>

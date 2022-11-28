@@ -38,11 +38,14 @@
 
 
   --indent: 2.5rem;
+  --header-height: 8rem;
+  --nav-height: 5.5rem;
+  --sidebar-width: 28rem
 }
 
 ::-webkit-scrollbar {
   width: 1.2rem;
-  background: var(--background);
+  background: var(--background-light);
 }
 
 ::-webkit-scrollbar-track {
@@ -50,7 +53,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  border: 0.3rem solid var(--background);
+  border: 0.3rem solid var(--background-light);
   border-radius: 1rem;
   background: var(--scrollbar);
 }
@@ -62,28 +65,41 @@ body {
   width: 100%;
   line-height: 1.25;
   background: var(--background-light);
-  overflow: hidden;
+  overflow: auto;
+  min-height: 100vh;
+  padding-top: var(--header-height);
+  padding-right: var(--sidebar-width);
+  padding-left: var(--sidebar-width);
 }
 
 main {
   display: flex;
   justify-content: space-between;
-  height: calc(100vh - 8rem);
 }
 
 .sidebar {
-  width: 28rem;
-  min-width: 28rem;
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   background: var(--background-light);
   height: 100%;
   display: flex;
   align-items: center;
   padding: 0 var(--indent);
+  position: fixed;
+  z-index: 999;
 
   .wrapper {
     height: 100%;
     width: 100%;
   }
+}
+
+.sidebar:first-child {
+  left: 0;
+}
+
+.sidebar:last-child {
+  right: 0;
 }
 
 .container {
@@ -96,6 +112,7 @@ main {
   border-radius: 2rem 2rem 0 0;
   height: 100%;
   padding: var(--indent);
+  min-height: calc(100vh - var(--header-height));
 }
 
 .block {
@@ -215,6 +232,9 @@ main {
 }
 
 @media(max-width: 1280px) {
+  *, *:after, *:before {
+    font-size: calc(4px + 6 * (100vw / 1920));
+  }
   main {
     .sidebar:last-child {
       padding: 0;
@@ -226,11 +246,15 @@ main {
       }
     }
   }
+  body {
+    padding-right: 3rem;
+  }
 }
+
 
 @media(max-width: 480px) {
   *, *:after, *:before {
-    font-size: calc(7px + 3 * (100vw / 1920));
+    font-size: calc(8px + 2 * (100vw / 1920));
   }
   :root {
     --indent: 1rem;
@@ -248,10 +272,22 @@ main {
       display: none;
     }
   }
-}
+  body {
+    padding-bottom: var(--nav-height);
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .user {
+    .text {
+      margin-left: 1.2rem;
 
-@media(max-width: 440px) {
-  *, *:after, *:before {
-    font-size: calc(6px + 4 * (100vw / 1920));
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .subtext {
+        font-size: 1.3rem;
+      }
+    }
   }
 }

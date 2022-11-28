@@ -18,7 +18,7 @@ const User: React.FC<TUserProps> = ({ id, username, message }) => {
         clsx("user", classes.user, { [classes["user-active"]]: link.isActive })
       }
     >
-      <Avatar />
+      <Avatar className={classes.avatar} src={null} />
       <div className={clsx("text", classes.text)}>
         <p className={clsx("title", classes.title)}>{username}</p>
         <p className={clsx("subtext", classes.subtext)}>{message}</p>

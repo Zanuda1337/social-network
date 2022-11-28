@@ -3,7 +3,7 @@
   flex-direction: column;
   width: 16.66%;
   align-items: center;
-  padding: 2rem;
+  padding: 2rem 2rem 4rem;
   --avatar-size: 15rem;
 
   a {
@@ -108,14 +108,22 @@
     width: 25%;
   }
 }
-@media(max-width: 750px) {
+@media(max-width: 850px) {
   .user {
     width: 33.33%;
   }
 }
-@media(max-width: 400px) {
+@media(max-width: 550px) {
   .user {
     width: 50%;
+  }
+}
+@media(max-width: 380px) {
+  .user {
+    width: 100%;
+  }
+  .button {
+    width: 20rem;
   }
 }
 

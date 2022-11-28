@@ -13,7 +13,7 @@ const SmallMessenger: React.FC = () => {
           <div className={classes.friend}>
             <div className={classes.block}>
               <NavLink to="/profile">
-                <Avatar />
+                <Avatar src={null} />
               </NavLink>
               <div className={classes.text}>
                 <p>Richard</p>
@@ -29,7 +29,7 @@ const SmallMessenger: React.FC = () => {
           <div className={classes.friend}>
             <div className={classes.block}>
               <NavLink to="/profile">
-                <Avatar />
+                <Avatar src={null} />
               </NavLink>
               <div className={classes.text}>
                 <p>Violet</p>
